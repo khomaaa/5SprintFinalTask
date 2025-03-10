@@ -20,9 +20,9 @@ type Training struct {
 }
 
 var (
-	ErrInvalidData     = errors.New("Не корректный формат данных")
-	ErrInvalidActivity = errors.New("Не корректный тип тренировки")
-	ErrInvalidDataTime = errors.New("Не корректный формат времени")
+	ErrInvalidData     = errors.New("incorrect data format")
+	ErrInvalidActivity = errors.New("incorrect type of training")
+	ErrInvalidDataTime = errors.New("incorrect time format")
 )
 
 // создайте метод Parse()
@@ -62,21 +62,24 @@ func (t Training) ActionInfo() (string, error) {
 	speed := spentenergy.MeanSpeed(t.Steps, t.Duration)
 
 	cal := 0.0
-	if strings.ToLower(t.TrainingType) == "ходьба" {
-		calories, err := spentenergy.RunningSpentCalories(t.Steps, t.Personal.Weight, t.Duration)
-		if err != nil {
-			return "", err
-		}
-		cal = calories
-	} else if strings.ToLower(t.TrainingType) == "бег" {
+
+	switch strings.ToLower(t.TrainingType) {
+	case "ходьба":
 		calories, err := spentenergy.WalkingSpentCalories(t.Steps, t.Personal.Weight, t.Personal.Height, t.Duration)
 		if err != nil {
 			return "", err
 		}
 		cal = calories
-	} else {
+	case "бег":
+		calories, err := spentenergy.RunningSpentCalories(t.Steps, t.Personal.Weight, t.Duration)
+		if err != nil {
+			return "", err
+		}
+		cal = calories
+	default:
 		return "", ErrInvalidActivity
 	}
-	result := fmt.Sprintf("Тип тренировки: %s\nДлительность: %0.2f ч.\nДистанция: %0.2f км.\nСкорость: %0.2f км/ч\nСожгли калорий: %0.2f", t.TrainingType, t.Duration.Hours(), distance, speed, cal)
+
+	result := fmt.Sprintf("Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f", t.TrainingType, t.Duration.Hours(), distance, speed, cal)
 	return result, nil
 }
