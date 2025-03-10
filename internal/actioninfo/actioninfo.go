@@ -21,6 +21,13 @@ func Info(dataset []string, dp DataParser) {
 		}
 
 		// Вывод информации об активности
-		fmt.Println(dp.ActionInfo())
+		actionInfo, err := dp.ActionInfo()
+		if err != nil {
+			// Обработка ошибки получения информации об активности
+			fmt.Printf("Ошибка получения информации об активности: %v\n", err)
+			continue // Переход к следующей итерации цикла
+		}
+
+		fmt.Println(actionInfo)
 	}
 }

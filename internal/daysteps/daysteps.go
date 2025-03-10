@@ -1,14 +1,15 @@
 package daysteps
 
 import (
+	// Стандартные библиотеки
 	"errors"
 	"fmt"
 	"strconv"
 	"strings"
 	"time"
 
+	// Локальные библиотеки
 	"github.com/Yandex-Practicum/go1fl-sprint5-final/internal/personaldata"
-
 	"github.com/Yandex-Practicum/go1fl-sprint5-final/internal/spentenergy"
 )
 
@@ -17,8 +18,8 @@ const (
 )
 
 var (
-	ErrInvalidData     = errors.New("Не корректный формат данных")
-	ErrInvalidDataTime = errors.New("Не корректный формат времени")
+	ErrInvalidData     = errors.New("incorrect data format")
+	ErrInvalidDataTime = errors.New("incorrect time format")
 )
 
 // создайте структуру DaySteps
@@ -53,7 +54,7 @@ func (ds *DaySteps) Parse(datastring string) (err error) {
 // создайте метод ActionInfo()
 func (ds DaySteps) ActionInfo() (string, error) {
 	if ds.Steps <= 0 {
-		return "", errors.New("Шаг должен быть больше 0")
+		return "", errors.New("the step must be greater than 0")
 	}
 
 	distance := spentenergy.Distance(ds.Steps)
